@@ -1,17 +1,38 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <form>
+      <textarea
+        rows=10
+        v-model="form['input']"
+      />
+
+      <button v-on:click="transform" type="button">Transform</button>
+    </form>
+
+    <div id="foobar">
+      Result:<br/>
+      {{ result }}
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data: function() {
+    return {
+      form: {},
+      result: ''
+    };
+  },
+  methods: {
+    transform: function() {
+      let inputValue = this.form['input'];
+
+      if (inputValue !== undefined) {
+        this.result = inputValue.replace(/\n/g, ',');
+      }
+    }
   }
 }
 </script>
