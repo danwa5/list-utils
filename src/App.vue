@@ -2,7 +2,8 @@
   <div id="app">
     <form>
       <textarea
-        rows=10
+        rows="30"
+        columns="20"
         v-model="form['input']"
       />
 
@@ -11,7 +12,13 @@
 
     <div id="foobar">
       Result:<br/>
-      {{ result }}
+      <textarea
+        id="result"
+        rows="30"
+        cols="20"
+        v-model="result"
+      /><br/>
+      <button v-on:click="copy">Copy</button>
     </div>
   </div>
 </template>
@@ -26,6 +33,13 @@ export default {
     };
   },
   methods: {
+    copy: function() {
+      let copyText = document.getElementById("result");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // for mobile devices
+      document.execCommand("copy");
+    },
+
     transform: function() {
       let inputValue = this.form['input'];
 
