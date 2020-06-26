@@ -1,4 +1,4 @@
-# text-utils
+# list-utils
 
 ## Project setup
 ```

@@ -1,25 +1,46 @@
 <template>
   <div id="app">
-    <form>
-      <textarea
-        rows="30"
-        columns="20"
-        v-model="form['input']"
-      />
-
-      <button v-on:click="transform" type="button">Transform</button>
-    </form>
-
-    <div id="foobar">
-      Result:<br/>
-      <textarea
-        id="result"
-        rows="30"
-        cols="20"
-        v-model="result"
-      /><br/>
-      <button v-on:click="copy">Copy</button>
+    <div>
+      <b-navbar toggleable="lg" type="dark" variant="dark">
+        <b-navbar-brand href="#">List-Utils</b-navbar-brand>
+      </b-navbar>
     </div>
+    <b-container fluid>
+      <b-row class="text-center pt-2">
+        <b-col cols="5" class="p-3">
+          <div class="mb-2">
+            <b-button size="sm" v-on:click="copy('input')">
+              <b-icon-files></b-icon-files>
+            </b-button>
+          </div>
+          <b-form>
+            <b-form-textarea
+              id="input"
+              v-model="form['input']"
+              rows="25"
+              placeholder="Enter a list"
+              no-resize
+            />
+          </b-form>
+        </b-col>
+        <b-col cols="2" class="p-3">
+          <b-button v-on:click="transform" variant="info" type="button">Transform</b-button>
+        </b-col>
+        <b-col cols="5" class="p-3">
+          <div class="mb-2">
+            <b-button size="sm" v-on:click="copy('result')">
+              <b-icon-files></b-icon-files>
+            </b-button>
+          </div>
+          <b-form-textarea
+            id="result"
+            v-model="result"
+            rows="25"
+            no-resize
+          />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -33,8 +54,8 @@ export default {
     };
   },
   methods: {
-    copy: function() {
-      let copyText = document.getElementById("result");
+    copy: function(elementId) {
+      let copyText = document.getElementById(elementId);
       copyText.select();
       copyText.setSelectionRange(0, 99999); // for mobile devices
       document.execCommand("copy");
@@ -50,14 +71,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
