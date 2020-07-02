@@ -19,7 +19,7 @@
               v-model="form['input']"
               v-on:input="countInputItems"
               rows="25"
-              placeholder="Enter a list"
+              placeholder="Enter a list of items (e.g. Sequel Pro query results)"
               no-resize
             />
           </b-form>
@@ -28,6 +28,7 @@
         <b-col cols="2" class="p-3">
           <b-button v-on:click="transform" variant="info" type="button">Transform</b-button>
 
+          <b-form-checkbox v-model="removeBlanks">Remove blanks</b-form-checkbox>
           <b-form-checkbox v-model="removeDuplicates">Remove duplicates</b-form-checkbox>
         </b-col>
         <b-col cols="5" class="p-3">
@@ -57,6 +58,7 @@ export default {
       form: {},
       inputItemCount: 0,
       outputItemCount: 0,
+      removeBlanks: true,
       removeDuplicates: true,
       result: ''
     };
@@ -82,16 +84,22 @@ export default {
       let inputValue = this.form['input'];
 
       if (inputValue !== undefined) {
-        var inputStr = inputValue.replace(/\n/g, ',');
+        var transformed = inputValue.replace(/\n/g, ',');
 
         if (this.removeDuplicates === true) {
-          let items = inputStr.split(',');
+          let items = transformed.split(',');
           const uniqueSet = new Set(items);
-          inputStr = [...uniqueSet].join(',')
+          transformed = [...uniqueSet].join(',');
         }
 
-        this.result = inputStr;
-        this.outputItemCount = this.countItems(inputStr, ',');
+        if (this.removeBlanks === true) {
+          let items = transformed.split(',');
+          const nonBlanks = items.filter(item => item.trim().length > 0);
+          transformed = nonBlanks.join(',');
+        }
+
+        this.result = transformed;
+        this.outputItemCount = this.countItems(transformed, ',');
       }
     }
   }
