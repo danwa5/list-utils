@@ -2,39 +2,44 @@
   <div id="app">
     <div>
       <b-navbar toggleable="lg" type="dark" variant="dark">
-        <b-navbar-brand href="#">List-Utils</b-navbar-brand>
+        <b-navbar-brand href="#"><b-icon-lightning-fill></b-icon-lightning-fill></b-navbar-brand>
       </b-navbar>
     </div>
     <b-container fluid>
       <b-row class="text-center pt-2">
-        <b-col cols="5" class="p-3">
+        <b-col md="4" lg="4" class="p-3">
           <div class="mb-2">
             <b-button size="sm" v-on:click="copy('input')">
-              <b-icon-files></b-icon-files>
+              <b-icon-files></b-icon-files> Copy
             </b-button>
           </div>
           <b-form>
             <b-form-textarea
-              id="input"
               v-model="form['input']"
               v-on:input="countInputItems"
               rows="25"
-              placeholder="Enter a list of items (e.g. Sequel Pro query results)"
+              placeholder="Enter a list of items (e.g. column of Google Spreadsheet or Sequel Pro query results)"
               no-resize
             />
           </b-form>
-          Item Count: <strong>{{this.inputItemCount}}</strong>
+          <div class="pt-2">
+            Item Count <strong>{{this.inputItemCount}}</strong>
+          </div>
         </b-col>
-        <b-col cols="2" class="p-3">
-          <b-button v-on:click="transform" variant="info" type="button">Transform</b-button>
+        <b-col md="3" lg="2" class="p-3">
+          <div class="mt-5">
+            <b-button block v-on:click="transform" variant="info" type="button">Transform</b-button>
 
-          <b-form-checkbox v-model="removeBlanks">Remove blanks</b-form-checkbox>
-          <b-form-checkbox v-model="removeDuplicates">Remove duplicates</b-form-checkbox>
+            <div class="mt-4">
+              <b-form-checkbox v-model="removeBlanks">Remove blanks</b-form-checkbox>
+              <b-form-checkbox v-model="removeDuplicates">Remove duplicates</b-form-checkbox>
+            </div>
+          </div>
         </b-col>
-        <b-col cols="5" class="p-3">
+        <b-col md="5" lg="6" class="p-3">
           <div class="mb-2">
             <b-button size="sm" v-on:click="copy('result')">
-              <b-icon-files></b-icon-files>
+              <b-icon-files></b-icon-files> Copy
             </b-button>
           </div>
           <b-form-textarea
@@ -43,7 +48,9 @@
             rows="25"
             no-resize
           />
-          Item Count: <strong>{{this.outputItemCount}}</strong>
+          <div class="pt-2">
+            Item Count: <strong>{{this.outputItemCount}}</strong>
+          </div>
         </b-col>
       </b-row>
     </b-container>
