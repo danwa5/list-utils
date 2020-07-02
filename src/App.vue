@@ -17,11 +17,13 @@
             <b-form-textarea
               id="input"
               v-model="form['input']"
+              v-on:input="countInputItems"
               rows="25"
               placeholder="Enter a list"
               no-resize
             />
           </b-form>
+          Item Count: <strong>{{this.inputItemCount}}</strong>
         </b-col>
         <b-col cols="2" class="p-3">
           <b-button v-on:click="transform" variant="info" type="button">Transform</b-button>
@@ -50,7 +52,8 @@ export default {
   data: function() {
     return {
       form: {},
-      result: ''
+      result: '',
+      inputItemCount: 0
     };
   },
   methods: {
@@ -59,6 +62,16 @@ export default {
       copyText.select();
       copyText.setSelectionRange(0, 99999); // for mobile devices
       document.execCommand("copy");
+    },
+
+    countInputItems: function() {
+      let inputValue = this.form['input'].trim();
+
+      if (inputValue.length == 0) {
+        this.inputItemCount = 0
+      } else {
+        this.inputItemCount = ((inputValue.match(/\n/g) || []).length + 1);
+      }
     },
 
     transform: function() {
