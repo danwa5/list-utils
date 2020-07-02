@@ -2,7 +2,7 @@
   <div id="app">
     <div>
       <b-navbar toggleable="lg" type="dark" variant="dark">
-        <b-navbar-brand href="#"><b-icon-lightning-fill></b-icon-lightning-fill></b-navbar-brand>
+        <b-navbar-brand href="#"><b-icon-lightning-fill variant="warning"></b-icon-lightning-fill></b-navbar-brand>
       </b-navbar>
     </div>
     <b-container fluid>
@@ -12,18 +12,21 @@
             <b-button size="sm" v-on:click="copy('input')">
               <b-icon-files></b-icon-files> Copy
             </b-button>
+
+            <b-button size="sm" v-on:click="reset()" variant="danger" class="ml-2">
+              <b-icon-x-circle></b-icon-x-circle> Reset
+            </b-button>
           </div>
-          <b-form>
-            <b-form-textarea
-              v-model="form['input']"
-              v-on:input="countInputItems"
-              rows="25"
-              placeholder="Enter a list of items (e.g. column of Google Spreadsheet or Sequel Pro query results)"
-              no-resize
-            />
-          </b-form>
+          <b-form-textarea
+            id="input"
+            v-model="input"
+            v-on:input="countInputItems"
+            rows="25"
+            placeholder="Enter a list of items (e.g. column of Google Spreadsheet or Sequel Pro query results)"
+            no-resize
+          />
           <div class="pt-2">
-            Item Count <strong>{{this.inputItemCount}}</strong>
+            Item Count: <strong>{{this.inputItemCount}}</strong>
           </div>
         </b-col>
         <b-col md="3" lg="2" class="p-3">
@@ -38,13 +41,13 @@
         </b-col>
         <b-col md="5" lg="6" class="p-3">
           <div class="mb-2">
-            <b-button size="sm" v-on:click="copy('result')">
+            <b-button size="sm" v-on:click="copy('output')">
               <b-icon-files></b-icon-files> Copy
             </b-button>
           </div>
           <b-form-textarea
-            id="result"
-            v-model="result"
+            id="output"
+            v-model="output"
             rows="25"
             no-resize
           />
@@ -62,12 +65,12 @@ export default {
   name: 'App',
   data: function() {
     return {
-      form: {},
+      input: '',
       inputItemCount: 0,
+      output: '',
       outputItemCount: 0,
       removeBlanks: true,
-      removeDuplicates: true,
-      result: ''
+      removeDuplicates: true
     };
   },
   methods: {
@@ -79,7 +82,7 @@ export default {
     },
 
     countInputItems: function() {
-      this.inputItemCount = this.countItems(this.form['input'], '\n');
+      this.inputItemCount = this.countItems(this.input, '\n');
     },
 
     countItems: function(input, delimiter) {
@@ -87,8 +90,12 @@ export default {
       return input.length == 0 ? 0 : (input.match(regex) || []).length + 1;
     },
 
+    reset: function() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
+
     transform: function() {
-      let inputValue = this.form['input'];
+      let inputValue = this.input;
 
       if (inputValue !== undefined) {
         var transformed = inputValue.replace(/\n/g, ',');
@@ -105,7 +112,7 @@ export default {
           transformed = nonBlanks.join(',');
         }
 
-        this.result = transformed;
+        this.output = transformed;
         this.outputItemCount = this.countItems(transformed, ',');
       }
     }
