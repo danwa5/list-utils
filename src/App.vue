@@ -27,6 +27,8 @@
         </b-col>
         <b-col cols="2" class="p-3">
           <b-button v-on:click="transform" variant="info" type="button">Transform</b-button>
+
+          <b-form-checkbox v-model="removeDuplicates">Remove duplicates</b-form-checkbox>
         </b-col>
         <b-col cols="5" class="p-3">
           <div class="mb-2">
@@ -40,6 +42,7 @@
             rows="25"
             no-resize
           />
+          Item Count: <strong>{{this.outputItemCount}}</strong>
         </b-col>
       </b-row>
     </b-container>
@@ -52,8 +55,10 @@ export default {
   data: function() {
     return {
       form: {},
-      result: '',
-      inputItemCount: 0
+      inputItemCount: 0,
+      outputItemCount: 0,
+      removeDuplicates: true,
+      result: ''
     };
   },
   methods: {
@@ -78,7 +83,16 @@ export default {
       let inputValue = this.form['input'];
 
       if (inputValue !== undefined) {
-        this.result = inputValue.replace(/\n/g, ',');
+        var inputStr = inputValue.replace(/\n/g, ',');
+
+        if (this.removeDuplicates === true) {
+          let items = inputStr.split(',');
+          const uniqueSet = new Set(items);
+          inputStr = [...uniqueSet].join(',')
+        }
+
+        this.result = inputStr;
+        this.outputItemCount = ((inputStr.match(/,/g) || []).length + 1);
       }
     }
   }
