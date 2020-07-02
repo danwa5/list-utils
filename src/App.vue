@@ -70,13 +70,12 @@ export default {
     },
 
     countInputItems: function() {
-      let inputValue = this.form['input'].trim();
+      this.inputItemCount = this.countItems(this.form['input'], '\n');
+    },
 
-      if (inputValue.length == 0) {
-        this.inputItemCount = 0
-      } else {
-        this.inputItemCount = ((inputValue.match(/\n/g) || []).length + 1);
-      }
+    countItems: function(input, delimiter) {
+      let regex = new RegExp(delimiter, 'g');
+      return input.length == 0 ? 0 : (input.match(regex) || []).length + 1;
     },
 
     transform: function() {
@@ -92,7 +91,7 @@ export default {
         }
 
         this.result = inputStr;
-        this.outputItemCount = ((inputStr.match(/,/g) || []).length + 1);
+        this.outputItemCount = this.countItems(inputStr, ',');
       }
     }
   }
