@@ -34,8 +34,9 @@
             <b-button block v-on:click="transform" variant="info" type="button">Transform</b-button>
 
             <div class="mt-4">
-              <b-form-checkbox v-model="removeBlanks">Remove blanks</b-form-checkbox>
-              <b-form-checkbox v-model="removeDuplicates">Remove duplicates</b-form-checkbox>
+              <b-form-checkbox v-model="removeBlanks" class="py-1">Remove blanks</b-form-checkbox>
+              <b-form-checkbox v-model="removeDuplicates" class="py-1">Remove duplicates</b-form-checkbox>
+              <b-form-checkbox v-model="encloseInQuotes" class="py-1">Enclose in quotes</b-form-checkbox>
             </div>
           </div>
         </b-col>
@@ -70,7 +71,8 @@ export default {
       output: '',
       outputItemCount: 0,
       removeBlanks: true,
-      removeDuplicates: true
+      removeDuplicates: true,
+      encloseInQuotes: false
     };
   },
   methods: {
@@ -108,8 +110,12 @@ export default {
 
         if (this.removeBlanks === true) {
           let items = transformed.split(',');
-          const nonBlanks = items.filter(item => item.trim().length > 0);
-          transformed = nonBlanks.join(',');
+          transformed = items.filter(item => item.trim().length > 0).join(',');
+        }
+
+        if (this.encloseInQuotes === true) {
+          let items = transformed.split(',');
+          transformed = items.map(item => `'${item}'`).join(',');
         }
 
         this.output = transformed;
