@@ -26,7 +26,7 @@
             no-resize
           />
           <div class="pt-2">
-            Item Count: <strong>{{this.inputItemCount}}</strong>
+            Item Count: <span class="inputItemCount"><strong>{{this.inputItemCount}}</strong></span>
           </div>
         </b-col>
         <b-col md="3" lg="2" class="p-3">
@@ -34,9 +34,9 @@
             <b-button block v-on:click="transform" variant="info" type="button">Transform</b-button>
 
             <div class="mt-4">
-              <b-form-checkbox v-model="removeBlanks" class="py-1">Remove blanks</b-form-checkbox>
-              <b-form-checkbox v-model="removeDuplicates" class="py-1">Remove duplicates</b-form-checkbox>
-              <b-form-checkbox v-model="encloseInQuotes" class="py-1">Enclose in quotes</b-form-checkbox>
+              <b-form-checkbox id="removeBlanks" v-model="removeBlanks" class="py-1">Remove blanks</b-form-checkbox>
+              <b-form-checkbox id="removeDuplicates" v-model="removeDuplicates" class="py-1">Remove duplicates</b-form-checkbox>
+              <b-form-checkbox id="encloseInQuotes" v-model="encloseInQuotes" class="py-1">Enclose in quotes</b-form-checkbox>
             </div>
           </div>
         </b-col>
@@ -53,7 +53,7 @@
             no-resize
           />
           <div class="pt-2">
-            Item Count: <strong>{{this.outputItemCount}}</strong>
+            Item Count: <span class="outputItemCount"><strong>{{this.outputItemCount}}</strong></span>
           </div>
         </b-col>
       </b-row>
