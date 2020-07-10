@@ -1,6 +1,7 @@
 describe('Transform', () => {
   beforeEach(() => {
     cy.visit('/')
+    cy.get('#delimiter').should('have.value', 'comma')
     cy.get('#removeBlanks').should('be.checked')
     cy.get('#removeDuplicates').should('be.checked')
     cy.get('#encloseInQuotes').should('not.be.checked')
@@ -51,14 +52,15 @@ describe('Transform', () => {
     cy.get('.outputItemCount').should('have.text', '1')
   })
 
-  it('transforms with all options', () => {
+  it('transforms with all options and semicolon delimiter', () => {
     cy.get('#input').type('\n  \n123\n456\n123\n789\n')
     cy.get('.inputItemCount').should('have.text', '7')
 
+    cy.get('#delimiter').select('semicolon')
     cy.get('#encloseInQuotes').check({ force: true })
     cy.contains('Transform').click()
 
-    cy.get('#output').should('have.value', "'123','456','789'")
+    cy.get('#output').should('have.value', "'123';'456';'789'")
     cy.get('.outputItemCount').should('have.text', '3')
   })
 })

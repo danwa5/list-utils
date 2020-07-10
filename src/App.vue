@@ -21,7 +21,7 @@
             id="input"
             v-model="input"
             v-on:input="countInputItems"
-            rows="25"
+            rows="24"
             placeholder="Enter a list of items (e.g. column of Google Spreadsheet or Sequel Pro query results)"
             no-resize
           />
@@ -34,6 +34,7 @@
             <b-button block v-on:click="transform" variant="info" type="button">Transform</b-button>
 
             <div class="mt-4">
+              <b-form-select id="delimiter" v-model="selectedDelimiter" :options="delimiterOptions" size="sm" class="my-1"></b-form-select>
               <b-form-checkbox id="removeBlanks" v-model="removeBlanks" class="py-1">Remove blanks</b-form-checkbox>
               <b-form-checkbox id="removeDuplicates" v-model="removeDuplicates" class="py-1">Remove duplicates</b-form-checkbox>
               <b-form-checkbox id="encloseInQuotes" v-model="encloseInQuotes" class="py-1">Enclose in quotes</b-form-checkbox>
@@ -49,7 +50,7 @@
           <b-form-textarea
             id="output"
             v-model="output"
-            rows="25"
+            rows="24"
             no-resize
           />
           <div class="pt-2">
@@ -70,6 +71,12 @@ export default {
       inputItemCount: 0,
       output: '',
       outputItemCount: 0,
+      selectedDelimiter: 'comma',
+      delimiterOptions: [
+        { value: 'comma', text: 'Delimiter: comma' },
+        { value: 'newline', text: 'Delimiter: newline' },
+        { value: 'semicolon', text: 'Delimiter: semicolon' }
+      ],
       removeBlanks: true,
       removeDuplicates: true,
       encloseInQuotes: false
@@ -100,26 +107,35 @@ export default {
       let inputValue = this.input;
 
       if (inputValue !== undefined) {
-        var transformed = inputValue.replace(/\n/g, ',');
+        const delimiters = {
+          'comma': ',',
+          'newline': '\n',
+          'semicolon': ';'
+        }
+
+        const delimiter = delimiters[this.selectedDelimiter];
+
+        // no need to replace delimiter if it hasn't changed
+        var transformed = this.selectedDelimiter === 'newline' ? inputValue : inputValue.replace(/\n/g, delimiter);
 
         if (this.removeDuplicates === true) {
-          let items = transformed.split(',');
+          let items = transformed.split(delimiter);
           const uniqueSet = new Set(items);
-          transformed = [...uniqueSet].join(',');
+          transformed = [...uniqueSet].join(delimiter);
         }
 
         if (this.removeBlanks === true) {
-          let items = transformed.split(',');
-          transformed = items.filter(item => item.trim().length > 0).join(',');
+          let items = transformed.split(delimiter);
+          transformed = items.filter(item => item.trim().length > 0).join(delimiter);
         }
 
         if (this.encloseInQuotes === true) {
-          let items = transformed.split(',');
-          transformed = items.map(item => `'${item}'`).join(',');
+          let items = transformed.split(delimiter);
+          transformed = items.map(item => `'${item}'`).join(delimiter);
         }
 
         this.output = transformed;
-        this.outputItemCount = this.countItems(transformed, ',');
+        this.outputItemCount = this.countItems(transformed, delimiter);
       }
     }
   }
