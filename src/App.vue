@@ -2,7 +2,7 @@
   <div id="app">
     <div>
       <b-navbar toggleable="lg" type="dark" variant="dark">
-        <b-navbar-brand href="#"><b-icon-lightning-fill variant="warning"></b-icon-lightning-fill></b-navbar-brand>
+        <b-navbar-brand href="#">clippy</b-navbar-brand>
       </b-navbar>
     </div>
     <b-container fluid>
