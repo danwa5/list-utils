@@ -17,7 +17,7 @@ module.exports = {
       maxAssetSize: 512000
     },
     plugins: [
-      new BundleAnalyzerPlugin()
+      new BundleAnalyzerPlugin({ openAnalyzer: false })
     ]
   }
 }
