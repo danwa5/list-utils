@@ -1,8 +1,11 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const AnalyzerMode = function() {
+  return process.env.NODE_ENV === 'production' ? 'disabled' : 'server';
+};
+
 module.exports = {
   configureWebpack: {
-    mode: 'production',
     devServer: {
       disableHostCheck: true
     },
@@ -17,7 +20,10 @@ module.exports = {
       maxAssetSize: 512000
     },
     plugins: [
-      new BundleAnalyzerPlugin({ openAnalyzer: false })
+      new BundleAnalyzerPlugin({
+        analyzerMode: AnalyzerMode(),
+        openAnalyzer: false
+      })
     ]
   }
 }
