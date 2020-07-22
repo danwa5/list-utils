@@ -22,9 +22,7 @@ module.exports = {
     },
     plugins: [
       new BundleAnalyzerPlugin({
-        // analyzerMode: AnalyzerMode(),
-        openAnalyzer: false,
-        generateStatsFile: true
+        analyzerMode: 'disabled'
       })
     ]
   }
