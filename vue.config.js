@@ -1,11 +1,12 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const AnalyzerMode = function() {
-  return process.env.NODE_ENV === 'production' ? 'disabled' : 'server';
-};
+// const AnalyzerMode = function() {
+//   return process.env.NODE_ENV === 'production' ? 'disabled' : 'server';
+// };
 
 module.exports = {
   configureWebpack: {
+    mode: 'production',
     devServer: {
       disableHostCheck: true
     },
@@ -21,8 +22,9 @@ module.exports = {
     },
     plugins: [
       new BundleAnalyzerPlugin({
-        analyzerMode: AnalyzerMode(),
-        openAnalyzer: false
+        // analyzerMode: AnalyzerMode(),
+        openAnalyzer: false,
+        generateStatsFile: true
       })
     ]
   }

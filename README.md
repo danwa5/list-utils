@@ -9,6 +9,7 @@ blank and duplicate items and enclose items in quotes.
 
 - [Yarn](https://classic.yarnpkg.com/en/)
 - [Vue CLI](https://cli.vuejs.org/)
+- [Webpack](https://webpack.js.org/)
 
 ## Project setup
 ```
@@ -36,3 +37,8 @@ yarn lint
 ```
 yarn run cypress:open
 ```
+
+## Important
+
+- To optimize performance, this app is configured to only import the Bootstrap components
+that it uses. However, Webpack 4 typically only [tree shakes](https://webpack.js.org/guides/tree-shaking/#conclusion) in production mode. Your bundle size will depend on the mode you're using.
