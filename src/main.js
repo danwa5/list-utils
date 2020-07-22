@@ -6,6 +6,7 @@ import {
   BIconFiles,
   ButtonPlugin,
   FormCheckboxPlugin,
+  FormSelectPlugin,
   FormTextareaPlugin,
   LayoutPlugin,
   NavbarPlugin
@@ -18,6 +19,7 @@ Vue.config.productionTip = true
 
 Vue.use(ButtonPlugin)
 Vue.use(FormCheckboxPlugin)
+Vue.use(FormSelectPlugin)
 Vue.use(FormTextareaPlugin)
 Vue.use(LayoutPlugin)
 Vue.use(NavbarPlugin)

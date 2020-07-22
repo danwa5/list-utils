@@ -75,7 +75,8 @@ export default {
       delimiterOptions: [
         { value: 'comma', text: 'Delimiter: comma' },
         { value: 'newline', text: 'Delimiter: newline' },
-        { value: 'semicolon', text: 'Delimiter: semicolon' }
+        { value: 'semicolon', text: 'Delimiter: semicolon' },
+        { value: 'space', text: 'Delimiter: space' }
       ],
       removeBlanks: true,
       removeDuplicates: true,
@@ -110,7 +111,8 @@ export default {
         const delimiters = {
           'comma': ',',
           'newline': '\n',
-          'semicolon': ';'
+          'semicolon': ';',
+          'space': ' '
         }
 
         const delimiter = delimiters[this.selectedDelimiter];
