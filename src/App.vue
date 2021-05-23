@@ -44,33 +44,20 @@
         <b-col md="5" lg="6" class="p-3">
           <div class="mb-2">
             <b-tabs class="mt-1">
-              <b-tab title="Results" active>
+              <b-tab :title="resultsTabTitle" v-on:click="toggleCopyElement('results')" active>
                 <b-card-text>
-                  <div class="mb-2">
-                    <b-button size="sm" v-on:click="copy('output')">
-                      <b-icon-files></b-icon-files> Copy
-                    </b-button>
-                  </div>
                   <b-form-textarea
-                    id="output"
+                    id="results"
                     class="mt-1"
-                    v-model="output"
+                    v-model="results"
                     rows="24"
                     no-resize
                   />
-                  <div class="pt-2">
-                    Item Count: <span class="outputItemCount"><strong>{{this.outputItemCount}}</strong></span>
-                  </div>
                 </b-card-text>
               </b-tab>
 
-              <b-tab title="Duplicates" v-bind:disabled="isDuplicatesDisabled">
+              <b-tab :title="duplicatesTabTitle" v-bind:disabled="isDuplicatesDisabled" v-on:click="toggleCopyElement('duplicates')">
                 <b-card-text>
-                  <div class="mb-2">
-                    <b-button size="sm" v-on:click="copy('duplicates')">
-                      <b-icon-files></b-icon-files> Copy Duplicates
-                    </b-button>
-                  </div>
                   <b-form-textarea
                     id="duplicates"
                     class="mt-1"
@@ -80,6 +67,14 @@
                   />
                 </b-card-text>
               </b-tab>
+
+              <template #tabs-end>
+                <li role="presentation" class="nav-item ml-auto">
+                  <b-button size="sm" v-on:click="copy(copyElementId)">
+                    <b-icon-files></b-icon-files> Copy {{copyElementId.charAt(0).toUpperCase() + copyElementId.slice(1)}}
+                  </b-button>
+                </li>
+              </template>
             </b-tabs>
           </div>
         </b-col>
@@ -93,11 +88,15 @@ export default {
   name: 'App',
   data: function() {
     return {
+      copyElementId: 'results',
       input: '',
       inputItemCount: 0,
-      output: '',
-      outputItemCount: 0,
+      results: '',
+      resultsItemCount: 0,
+      resultsTabTitle: 'Results',
       duplicates: '',
+      duplicatesItemCount: 0,
+      duplicatesTabTitle: 'Duplicates',
       isDuplicatesDisabled: true,
       selectedDelimiter: 'comma',
       delimiterOptions: [
@@ -130,6 +129,12 @@ export default {
 
     reset: function() {
       Object.assign(this.$data, this.$options.data.apply(this));
+    },
+
+    toggleCopyElement: function(targetElementId) {
+      if (this.copyElementId !== targetElementId) {
+        this.copyElementId = targetElementId;
+      }
     },
 
     transform: function() {
@@ -182,9 +187,12 @@ export default {
           dupes = dupeItems.map(item => `'${item}'`).join(delimiter);
         }
 
-        this.output = transformed;
-        this.outputItemCount = this.countItems(transformed, delimiter);
+        this.results = transformed;
+        this.resultsItemCount = this.countItems(transformed, delimiter);
+        this.resultsTabTitle = 'Results (' + this.resultsItemCount + ')';
         this.duplicates = dupes;
+        this.duplicatesItemCount = this.countItems(dupes, delimiter);
+        this.duplicatesTabTitle = 'Duplicates (' + this.duplicatesItemCount + ')';
         this.isDuplicatesDisabled = dupes.length === 0;
       }
     }
