@@ -43,18 +43,39 @@
         </b-col>
         <b-col md="5" lg="6" class="p-3">
           <div class="mb-2">
-            <b-button size="sm" v-on:click="copy('output')">
-              <b-icon-files></b-icon-files> Copy
-            </b-button>
-          </div>
-          <b-form-textarea
-            id="output"
-            v-model="output"
-            rows="24"
-            no-resize
-          />
-          <div class="pt-2">
-            Item Count: <span class="outputItemCount"><strong>{{this.outputItemCount}}</strong></span>
+            <b-tabs class="mt-1">
+              <b-tab :title="resultsTabTitle" v-on:click="toggleCopyElement('results')" active>
+                <b-card-text>
+                  <b-form-textarea
+                    id="results"
+                    class="mt-1"
+                    v-model="results"
+                    rows="24"
+                    no-resize
+                  />
+                </b-card-text>
+              </b-tab>
+
+              <b-tab :title="duplicatesTabTitle" v-bind:disabled="isDuplicatesDisabled" v-on:click="toggleCopyElement('duplicates')">
+                <b-card-text>
+                  <b-form-textarea
+                    id="duplicates"
+                    class="mt-1"
+                    v-model="duplicates"
+                    rows="24"
+                    no-resize
+                  />
+                </b-card-text>
+              </b-tab>
+
+              <template #tabs-end>
+                <li role="presentation" class="nav-item ml-auto">
+                  <b-button size="sm" v-on:click="copy(copyElementId)">
+                    <b-icon-files></b-icon-files> Copy {{copyElementId.charAt(0).toUpperCase() + copyElementId.slice(1)}}
+                  </b-button>
+                </li>
+              </template>
+            </b-tabs>
           </div>
         </b-col>
       </b-row>
@@ -67,10 +88,16 @@ export default {
   name: 'App',
   data: function() {
     return {
+      copyElementId: 'results',
       input: '',
       inputItemCount: 0,
-      output: '',
-      outputItemCount: 0,
+      results: '',
+      resultsItemCount: 0,
+      resultsTabTitle: 'Results',
+      duplicates: '',
+      duplicatesItemCount: 0,
+      duplicatesTabTitle: 'Duplicates',
+      isDuplicatesDisabled: true,
       selectedDelimiter: 'comma',
       delimiterOptions: [
         { value: 'comma', text: 'Delimiter: comma' },
@@ -104,6 +131,12 @@ export default {
       Object.assign(this.$data, this.$options.data.apply(this));
     },
 
+    toggleCopyElement: function(targetElementId) {
+      if (this.copyElementId !== targetElementId) {
+        this.copyElementId = targetElementId;
+      }
+    },
+
     transform: function() {
       let inputValue = this.input;
 
@@ -120,24 +153,47 @@ export default {
         // no need to replace delimiter if it hasn't changed
         var transformed = this.selectedDelimiter === 'newline' ? inputValue : inputValue.replace(/\n/g, delimiter);
 
+        var dupes = '';
+
         if (this.removeDuplicates === true) {
           let items = transformed.split(delimiter);
+
+          // find duplicate items. if none, default to []
+          dupes = items.reduce((acc, val, index, items) => {
+            if (items.indexOf(val) !== index && acc.indexOf(val) < 0) {
+              acc.push(val);
+            }
+            return acc;
+          }, []);
+
           const uniqueSet = new Set(items);
           transformed = [...uniqueSet].join(delimiter);
+          dupes = dupes.join(delimiter);
         }
 
         if (this.removeBlanks === true) {
           let items = transformed.split(delimiter);
           transformed = items.filter(item => item.trim().length > 0).join(delimiter);
+
+          let dupeItems = dupes.split(delimiter);
+          dupes = dupeItems.filter(item => item.trim().length > 0).join(delimiter);
         }
 
         if (this.encloseInQuotes === true) {
           let items = transformed.split(delimiter);
           transformed = items.map(item => `'${item}'`).join(delimiter);
+
+          let dupeItems = dupes.split(delimiter);
+          dupes = dupeItems.map(item => `'${item}'`).join(delimiter);
         }
 
-        this.output = transformed;
-        this.outputItemCount = this.countItems(transformed, delimiter);
+        this.results = transformed;
+        this.resultsItemCount = this.countItems(transformed, delimiter);
+        this.resultsTabTitle = 'Results (' + this.resultsItemCount + ')';
+        this.duplicates = dupes;
+        this.duplicatesItemCount = this.countItems(dupes, delimiter);
+        this.duplicatesTabTitle = 'Duplicates (' + this.duplicatesItemCount + ')';
+        this.isDuplicatesDisabled = dupes.length === 0;
       }
     }
   }

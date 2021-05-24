@@ -5,11 +5,13 @@ import {
   BIconXCircle,
   BIconFiles,
   ButtonPlugin,
+  CardPlugin,
   FormCheckboxPlugin,
   FormSelectPlugin,
   FormTextareaPlugin,
   LayoutPlugin,
-  NavbarPlugin
+  NavbarPlugin,
+  TabsPlugin
 } from 'bootstrap-vue'
 
 import './styles/custom.scss';
@@ -17,11 +19,13 @@ import './styles/custom.scss';
 Vue.config.productionTip = true
 
 Vue.use(ButtonPlugin)
+Vue.use(CardPlugin)
 Vue.use(FormCheckboxPlugin)
 Vue.use(FormSelectPlugin)
 Vue.use(FormTextareaPlugin)
 Vue.use(LayoutPlugin)
 Vue.use(NavbarPlugin)
+Vue.use(TabsPlugin)
 Vue.component('BIconFiles', BIconFiles)
 Vue.component('BIconXCircle', BIconXCircle)
 
