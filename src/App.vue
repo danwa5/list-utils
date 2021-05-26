@@ -111,6 +111,11 @@ export default {
     };
   },
   methods: {
+    addQuotesToItemsInCollection: function(collection, delimiter) {
+      let items = collection.split(delimiter);
+      return items.map(item => `'${item}'`).join(delimiter);
+    },
+
     copy: function(elementId) {
       let copyText = document.getElementById(elementId);
       copyText.select();
@@ -125,6 +130,11 @@ export default {
     countItems: function(input, delimiter) {
       let regex = new RegExp(delimiter, 'g');
       return input.length == 0 ? 0 : (input.match(regex) || []).length + 1;
+    },
+
+    removeBlanksFromCollection: function(collection, delimiter) {
+      let items = collection.split(delimiter);
+      return items.filter(item => item.trim().length > 0).join(delimiter);
     },
 
     reset: function() {
@@ -152,7 +162,6 @@ export default {
 
         // no need to replace delimiter if it hasn't changed
         var transformed = this.selectedDelimiter === 'newline' ? inputValue : inputValue.replace(/\n/g, delimiter);
-
         var dupes = '';
 
         if (this.removeDuplicates === true) {
@@ -172,19 +181,13 @@ export default {
         }
 
         if (this.removeBlanks === true) {
-          let items = transformed.split(delimiter);
-          transformed = items.filter(item => item.trim().length > 0).join(delimiter);
-
-          let dupeItems = dupes.split(delimiter);
-          dupes = dupeItems.filter(item => item.trim().length > 0).join(delimiter);
+          transformed = this.removeBlanksFromCollection(transformed, delimiter);
+          dupes       = this.removeBlanksFromCollection(dupes, delimiter);
         }
 
         if (this.encloseInQuotes === true) {
-          let items = transformed.split(delimiter);
-          transformed = items.map(item => `'${item}'`).join(delimiter);
-
-          let dupeItems = dupes.split(delimiter);
-          dupes = dupeItems.map(item => `'${item}'`).join(delimiter);
+          transformed = this.addQuotesToItemsInCollection(transformed, delimiter);
+          dupes       = this.addQuotesToItemsInCollection(dupes, delimiter);
         }
 
         this.results = transformed;
