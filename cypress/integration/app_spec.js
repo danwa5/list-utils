@@ -49,7 +49,7 @@ describe('Transform', () => {
     cy.contains('Transform').click()
 
     cy.get('#results').should('have.value', "'123'")
-    cy.get('#duplicates').should('have.value', "''")
+    cy.get('#duplicates').should('have.value', "")
   })
 
   it('transforms with all options and semicolon delimiter', () => {

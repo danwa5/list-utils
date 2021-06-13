@@ -113,7 +113,12 @@ export default {
   methods: {
     addQuotesToItemsInCollection: function(collection, delimiter) {
       let items = collection.split(delimiter);
-      return items.map(item => `'${item}'`).join(delimiter);
+
+      if (items.length === 1 && items.includes('')) {
+        return collection;
+      } else {
+        return items.map(item => `'${item}'`).join(delimiter);
+      }
     },
 
     copy: function(elementId) {
